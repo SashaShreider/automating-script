@@ -116,7 +116,7 @@ function printMessage ()
 end
 
 --Основной цикл
-function App()
+function farming()
     while true or (cycle_count - wave_count > 5)do
 
         --сбор наград с сундука, если он появился
@@ -147,4 +147,4 @@ function App()
     print("Ошибка: Количество сброшенных циклов больше 5")
 end
 
-App()
+farming()
