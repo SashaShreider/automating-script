@@ -18,7 +18,6 @@ brown_chest = "brown-chest.png"
 anti_clicker_reward = "anti-clicker-reward.png"
 -- Счетчики
 wave_count = 0
-wave_error_count = 0
 cycle_count = 0
 anti_clicker_counter = 0
 -- Список ошибок
@@ -40,7 +39,7 @@ function tapButton(imgPath, IsLog, timeout)
     end
     -- Логируем ошибку только если IsLog == true
     if IsLog then
-        table.insert(error_list, "[" .. wave_error_count .. "] : " .. imgPath)
+        table.insert(error_list, "[" .. wave_count+1  .. "] : " ..  imgPath)
     end
 
     return false
@@ -54,7 +53,7 @@ function wakeUp()
     -- ждем конца раунда
     while true do
         if os.time() - startTime > 1500 then
-            table.insert(error_list,"[" .. wave_count  .. "." ..  wave_error_count .. "] : " ..  "25+ мин ожидания")
+            table.insert(error_list,"[" .. wave_count+1  .. "] : " ..  "25+ мин ожидания")
             break -- Выходим из цикла принудительно
         end
         -- ищем победу или поражение
@@ -119,7 +118,6 @@ end
 --Основной цикл
 function App()
     while true or (cycle_count - wave_count > 5)do
-        wave_error_count = 0
 
         --сбор наград с сундука, если он появился
         tapButton(reward_chest, false)
@@ -131,9 +129,10 @@ function App()
         -- заходим в настройки
         tapButton(settings)
         -- включаем дремоту
-        tapButton(sleep)
-        -- выходим из сна
-        wakeUp()
+        if tapButton(sleep) then
+            -- выходим из сна
+            wakeUp()
+        end
         -- собираем награды
         if tapButton(end_game, true, 6) then
             wave_count = wave_count + 1
